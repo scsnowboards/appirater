@@ -165,6 +165,7 @@ static BOOL _modalOpen = false;
 
 - (void)showRatingAlert {
     [UIAlertView alertViewWithTitle:nil message:@"Do you love FullContact Card Reader?" cancelButtonTitle:@"No" otherButtonTitles:@[@"Yes"] onDismiss:^(int buttonIndex) {
+        [FCAnalytics logEvent:@"User Love"];
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:APPIRATER_MESSAGE_TITLE
                                                             message:APPIRATER_MESSAGE
                                                            delegate:self
@@ -177,6 +178,7 @@ static BOOL _modalOpen = false;
             [self.delegate appiraterDidDisplayAlert:self];
         }
     } onCancel:^{
+        [FCAnalytics logEvent:@"User Hate"];
         [UIAlertView alertViewWithTitle:nil message:@"We're sorry to hear Card Reader has not met your expectations, and we want to help. Would you like to submit a question or feedback so we can help make your experience better?" cancelButtonTitle:@"No" otherButtonTitles:@[@"Yes"] onDismiss:^(int buttonIndex) {
            
             UIWindow* window = [WindowManager sharedInstance].window;
