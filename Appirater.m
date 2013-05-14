@@ -164,17 +164,28 @@ static BOOL _modalOpen = false;
 }
 
 - (void)showRatingAlert {
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:APPIRATER_MESSAGE_TITLE
-														 message:APPIRATER_MESSAGE
-														delegate:self
-											   cancelButtonTitle:APPIRATER_CANCEL_BUTTON
-											   otherButtonTitles:APPIRATER_RATE_BUTTON, APPIRATER_RATE_LATER, nil];
-	self.ratingAlert = alertView;
-	[alertView show];
+    [UIAlertView alertViewWithTitle:nil message:@"Do you love FullContact Card Reader?" cancelButtonTitle:@"No" otherButtonTitles:@[@"Yes"] onDismiss:^(int buttonIndex) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:APPIRATER_MESSAGE_TITLE
+                                                            message:APPIRATER_MESSAGE
+                                                           delegate:self
+                                                  cancelButtonTitle:APPIRATER_CANCEL_BUTTON
+                                                  otherButtonTitles:APPIRATER_RATE_BUTTON, APPIRATER_RATE_LATER, nil];
+        self.ratingAlert = alertView;
+        [alertView show];
+        
+        if(self.delegate && [self.delegate respondsToSelector:@selector(appiraterDidDisplayAlert:)]){
+            [self.delegate appiraterDidDisplayAlert:self];
+        }
+    } onCancel:^{
+        [UIAlertView alertViewWithTitle:nil message:@"We're sorry to hear Card Reader has not met your expectations, and we want to help. Would you like to submit a question or feedback so we can help make your experience better?" cancelButtonTitle:@"No" otherButtonTitles:@[@"Yes"] onDismiss:^(int buttonIndex) {
+           
+            UIWindow* window = [WindowManager sharedInstance].window;
+            
+            [UserVoice presentUserVoiceContactUsFormForParentViewController:[WindowManager sharedInstance].window.rootViewController  andConfig:[AppDelegate uvConfig]];
+            } onCancel:nil
+         ];
+    }];
 	
-	if(self.delegate && [self.delegate respondsToSelector:@selector(appiraterDidDisplayAlert:)]){
-		[self.delegate appiraterDidDisplayAlert:self];
-	}
 }
 
 - (BOOL)ratingConditionsHaveBeenMet {
