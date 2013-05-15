@@ -180,11 +180,11 @@ static BOOL _modalOpen = false;
     } onCancel:^{
         [FCAnalytics logEvent:@"User Hate"];
         [UIAlertView alertViewWithTitle:nil message:@"We're sorry to hear Card Reader has not met your expectations, and we want to help. Would you like to submit a question or feedback so we can help make your experience better?" cancelButtonTitle:@"No" otherButtonTitles:@[@"Yes"] onDismiss:^(int buttonIndex) {
-           
-            UIWindow* window = [WindowManager sharedInstance].window;
-            
+            [FCAnalytics logEvent:@"User Hate Opening User Voice"];
             [UserVoice presentUserVoiceContactUsFormForParentViewController:[WindowManager sharedInstance].window.rootViewController  andConfig:[AppDelegate uvConfig]];
-            } onCancel:nil
+        } onCancel:^ {
+            [FCAnalytics logEvent:@"User Hate Doing Nothing"];
+        }
          ];
     }];
 	
